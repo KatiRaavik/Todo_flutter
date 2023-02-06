@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_todo_test/materials/colors.dart';
+import 'package:flutter_todo_test/models/task.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -9,12 +13,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<String> taskNames = [
-    'Esimene',
-    'Teine',
-    'Kolmas',
-  ];
-  String taskName = 'Esimene';
+  final taskList = Task.taskList();
 
   @override
   Widget build(BuildContext context) {
@@ -49,23 +48,58 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: taskNames.map((taskName) {
+              children: taskList.map((task) {
                 return Row(
                   children: [
-                    Checkbox(value: false, onChanged: ((value) => {})),
-                    SizedBox(width: 5.0),
-                    Text(taskName),
+                    Expanded(
+                        flex: 1,
+                        child:
+                            Checkbox(value: false, onChanged: ((value) => {}))),
+                    Expanded(
+                      flex: 5,
+                      child: Text(
+                        '${task.taskName}',
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 20.0,
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.delete,
+                          color: tdGrey,
+                          size: 28,
+                        ),
+                      ),
+                    ),
                   ],
                 );
               }).toList(),
             ),
             Container(
               alignment: Alignment.bottomCenter,
-              margin: EdgeInsets.fromLTRB(5.0, 5.0, 70.0, 15.0),
+              margin: EdgeInsets.fromLTRB(5.0, 5.0, 70.0, 10.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
               child: TextField(
+                decoration: InputDecoration(
+                  counterText: '',
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 15.0, vertical: 3.0),
+                  border: InputBorder.none,
+                ),
+                maxLength: 30,
                 style: TextStyle(
                   fontFamily: 'Poppins',
-                  fontSize: 25.0,
+                  fontSize: 20.0,
                 ),
               ),
             ),
@@ -76,7 +110,7 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            taskName = '';
+            '';
           });
         },
         backgroundColor: tdGreen,
