@@ -1,5 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_test/screens/home.dart';
+import 'package:flutter_todo_test/screens/loading.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +20,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ToDo App',
       home: Home(),
     );
   }

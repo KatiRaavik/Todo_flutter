@@ -1,6 +1,6 @@
 class Task {
-  String? id;
-  String? taskName;
+  String id;
+  String taskName;
   bool completed;
 
   Task({
@@ -13,16 +13,16 @@ class Task {
     return [
       Task(
         id: '01',
-        taskName: 'Esimene',
+        taskName: 'Esimene....1',
         completed: true,
       ),
       Task(
         id: '02',
-        taskName: 'Teine',
+        taskName: 'Teine....2',
       ),
       Task(
         id: '03',
-        taskName: 'Kolmas',
+        taskName: 'Kolmas....3',
       ),
     ];
   }

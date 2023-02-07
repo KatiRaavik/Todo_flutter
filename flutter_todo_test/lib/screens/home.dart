@@ -1,9 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_todo_test/materials/colors.dart';
 import 'package:flutter_todo_test/models/task.dart';
+
+import '../parts/nav_bar.dart';
+import '../widgets/task_view.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -13,32 +13,26 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  // tasks
   final taskList = Task.taskList();
+  // new item textfield controller
+  final _taskNameController = TextEditingController();
+  // new item adding function
+  void _addTasks(String task) {
+    setState(() {
+      taskList.add(Task(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        taskName: task,
+      ));
+    });
+    // clears the field
+    _taskNameController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: tdYellow,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Icon(
-              Icons.menu,
-              color: tdGrey,
-              size: 30,
-            ),
-            Container(
-              height: 30,
-              width: 30,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.asset('./assets/images/Todo.jpeg'),
-              ),
-            ),
-          ],
-        ),
-      ),
+      appBar: navBar(),
       body: Container(
         padding: EdgeInsets.all(10.0),
         alignment: Alignment.topLeft,
@@ -48,39 +42,17 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: taskList.map((task) {
-                return Row(
-                  children: [
-                    Expanded(
-                        flex: 1,
-                        child:
-                            Checkbox(value: false, onChanged: ((value) => {}))),
-                    Expanded(
-                      flex: 5,
-                      child: Text(
-                        '${task.taskName}',
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 20.0,
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.delete,
-                          color: tdGrey,
-                          size: 28,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
+              // to do list in lastly added order
+              children: taskList.reversed
+                  .map((task) => taskView(
+                        task: task,
+                        delete: () {
+                          setState(() {
+                            taskList.remove(task);
+                          });
+                        },
+                      ))
+                  .toList(),
             ),
             Container(
               alignment: Alignment.bottomCenter,
@@ -89,9 +61,15 @@ class _HomeState extends State<Home> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
               ),
+              // new item field
               child: TextField(
+                controller: _taskNameController,
                 decoration: InputDecoration(
                   counterText: '',
+                  hintText: 'Add new item...',
+                  hintStyle: TextStyle(
+                    fontSize: 18.0,
+                  ),
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 15.0, vertical: 3.0),
                   border: InputBorder.none,
@@ -106,12 +84,10 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-      // ignore: prefer_const_constructors
+      // new item button
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          setState(() {
-            '';
-          });
+          _addTasks(_taskNameController.text);
         },
         backgroundColor: tdGreen,
         child: Text(
