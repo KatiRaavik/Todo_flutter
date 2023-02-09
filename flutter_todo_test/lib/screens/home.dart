@@ -36,6 +36,7 @@ class _HomeState extends State<Home> {
   // new item adding function
   void _addTasks(String task) {
     setState(() {
+      // if it's empty, add a task
       if (_taskNameController.text != '') {
         db.taskList.add([_taskNameController.text, false]);
         // clears the field
@@ -121,7 +122,7 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-      // new item button
+      // new item adding button
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _addTasks(_taskNameController.text);
