@@ -36,9 +36,11 @@ class _HomeState extends State<Home> {
   // new item adding function
   void _addTasks(String task) {
     setState(() {
-      db.taskList.add([_taskNameController.text, false]);
-      // clears the field
-      _taskNameController.clear();
+      if (_taskNameController.text != '') {
+        db.taskList.add([_taskNameController.text, false]);
+        // clears the field
+        _taskNameController.clear();
+      }
     });
     db.updateData();
   }
@@ -124,6 +126,7 @@ class _HomeState extends State<Home> {
         onPressed: () {
           _addTasks(_taskNameController.text);
         },
+        enableFeedback: true,
         backgroundColor: tdGreen,
         child: Text(
           '+',
