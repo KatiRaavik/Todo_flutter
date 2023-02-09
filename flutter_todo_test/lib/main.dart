@@ -1,10 +1,15 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_test/screens/home.dart';
-import 'package:flutter_todo_test/screens/loading.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 
-void main() {
+void main() async {
+  // init hive
+  await Hive.initFlutter();
+
+  // open box
+  var box = await Hive.openBox('myDataBox');
+
   runApp(const MyApp());
 }
 

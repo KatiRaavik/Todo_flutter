@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_todo_test/data/database.dart';
 import 'dart:core';
 
 import '../materials/colors.dart';
-import '../models/task.dart';
 
-class taskView extends StatefulWidget {
-  final Task task;
-  final VoidCallback delete;
+class taskView extends StatelessWidget {
+  final String task;
+  void Function()? deletesTask;
+  Function(bool?)? onChanged;
+  final bool completed;
+
   taskView({
     super.key,
     required this.task,
-    required this.delete,
+    required this.deletesTask,
+    required this.onChanged,
+    required this.completed,
   });
 
-  @override
-  State<taskView> createState() => _taskViewState();
-}
-
-class _taskViewState extends State<taskView> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -25,46 +25,32 @@ class _taskViewState extends State<taskView> {
         Expanded(
           flex: 1,
           child: Checkbox(
-            value: widget.task.completed,
-            onChanged: (newValue) => {
-              setState(() {
-                // set the value of checkbox
-                widget.task.completed = newValue!;
-                // set value of tasks list on completion
-                if (newValue == false) {
-                  setState(() {
-                    widget.task.completed = false;
-                  });
-                } else {
-                  setState(() {
-                    widget.task.completed = true;
-                  });
-                }
-              })
-            },
+            value: completed,
+            // set the value of checkbox
+            onChanged: onChanged,
+            activeColor: Colors.green[600],
           ),
         ),
         Expanded(
           flex: 5,
           child: Text(
-            // assign task name
-            widget.task.taskName,
+            // task name
+            task,
             maxLines: 1,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 20.0,
               color: Colors.grey[800],
               // cross out when completed
-              decoration:
-                  widget.task.completed ? TextDecoration.lineThrough : null,
+              decoration: completed ? TextDecoration.lineThrough : null,
             ),
           ),
         ),
         Expanded(
           flex: 1,
           child: IconButton(
-            // call delete functiion
-            onPressed: widget.delete,
+            // call delete function
+            onPressed: deletesTask,
             icon: Icon(
               Icons.delete,
               color: tdGrey,
